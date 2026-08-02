@@ -5,19 +5,22 @@ Analyzes phone call transcripts (or Whisper-transcribed audio) for scam patterns
 
 from __future__ import annotations
 
-from typing import Optional
 import uuid
 
 from sqlalchemy.orm import Session
 
-from app.ml.phishing_model import phishing_model
-from app.ml.behavior_model import behavior_model
-from app.ml.url_detector import url_detector
-from app.ml.risk_engine import risk_engine
-from app.ml.whisper_service import whisper_service
-from app.database.models.models import Threat, ThreatType, ThreatLevel
-from app.schemas.schemas import CallAnalysisRequest, ThreatAnalysisResponse, TranscriptionResponse
 from app.core.logging import get_logger
+from app.database.models.models import Threat, ThreatLevel, ThreatType
+from app.ml.behavior_model import behavior_model
+from app.ml.phishing_model import phishing_model
+from app.ml.risk_engine import risk_engine
+from app.ml.url_detector import url_detector
+from app.ml.whisper_service import whisper_service
+from app.schemas.schemas import (
+    CallAnalysisRequest,
+    ThreatAnalysisResponse,
+    TranscriptionResponse,
+)
 
 logger = get_logger(__name__)
 
@@ -29,7 +32,7 @@ class CallService:
         self,
         request: CallAnalysisRequest,
         db: Session,
-        user_id: Optional[uuid.UUID] = None,
+        user_id: uuid.UUID | None = None,
     ) -> ThreatAnalysisResponse:
         """
         Analyze a phone call transcript for scam patterns.

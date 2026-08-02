@@ -6,21 +6,20 @@ Provides aggregated statistics and trend data for the frontend dashboard.
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
-from typing import List
 
-from sqlalchemy import func, desc
+from sqlalchemy import desc, func
 from sqlalchemy.orm import Session
 
-from app.database.models.models import Alert, Threat, AlertSeverity, User, UserRole
+from app.core.logging import get_logger
+from app.database.models.models import Alert, AlertSeverity, Threat, User, UserRole
+from app.schemas.analytics import TargetAnalyticsResponse, TargetMetric
 from app.schemas.schemas import (
     DashboardStats,
-    ThreatSummary,
-    ThreatListResponse,
-    ThreatTrend,
     DashboardTrends,
+    ThreatListResponse,
+    ThreatSummary,
+    ThreatTrend,
 )
-from app.schemas.analytics import TargetAnalyticsResponse, TargetMetric
-from app.core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -121,7 +120,7 @@ class DashboardService:
             .all()
         )
 
-        trends: List[ThreatTrend] = []
+        trends: list[ThreatTrend] = []
         for row in rows:
             trends.append(
                 ThreatTrend(

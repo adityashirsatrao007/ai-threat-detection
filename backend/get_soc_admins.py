@@ -3,8 +3,9 @@ import sys
 # Add the backend directory to sys.path so we can import 'app'
 sys.path.insert(0, "/Users/surajbayas/Developer/SentinelX/backend")
 
-from app.database.session import SessionLocal
 from app.database.models.models import User
+from app.database.session import SessionLocal
+
 
 def get_soc_users():
     db = SessionLocal()

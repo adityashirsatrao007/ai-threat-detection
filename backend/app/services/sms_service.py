@@ -5,18 +5,17 @@ Orchestrates SMS-specific scam/phishing detection pipeline.
 
 from __future__ import annotations
 
-from typing import Optional
 import uuid
 
 from sqlalchemy.orm import Session
 
-from app.ml.sms_model import sms_model
-from app.ml.behavior_model import behavior_model
-from app.ml.url_detector import url_detector
-from app.ml.risk_engine import risk_engine
-from app.database.models.models import Threat, ThreatType, ThreatLevel
-from app.schemas.schemas import SMSAnalysisRequest, ThreatAnalysisResponse
 from app.core.logging import get_logger
+from app.database.models.models import Threat, ThreatLevel, ThreatType
+from app.ml.behavior_model import behavior_model
+from app.ml.risk_engine import risk_engine
+from app.ml.sms_model import sms_model
+from app.ml.url_detector import url_detector
+from app.schemas.schemas import SMSAnalysisRequest, ThreatAnalysisResponse
 
 logger = get_logger(__name__)
 
@@ -28,7 +27,7 @@ class SMSService:
         self,
         request: SMSAnalysisRequest,
         db: Session,
-        user_id: Optional[uuid.UUID] = None,
+        user_id: uuid.UUID | None = None,
     ) -> ThreatAnalysisResponse:
         """
         Analyze an SMS message for scam/phishing threats.

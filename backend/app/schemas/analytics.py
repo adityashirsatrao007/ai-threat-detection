@@ -1,5 +1,6 @@
+
 from pydantic import BaseModel
-from typing import List
+
 
 class TargetMetric(BaseModel):
     name: str
@@ -7,5 +8,5 @@ class TargetMetric(BaseModel):
     avg_risk_score: float
 
 class TargetAnalyticsResponse(BaseModel):
-    departments: List[TargetMetric]
-    roles: List[TargetMetric]
+    departments: list[TargetMetric]
+    roles: list[TargetMetric]

@@ -2,6 +2,8 @@
 SentinelX — Full API Health Check
 Tests every registered route against the live local backend.
 """
+import sys
+
 import httpx
 
 BASE = "http://localhost:8000"
@@ -53,7 +55,7 @@ with httpx.Client(base_url=BASE, timeout=15) as c:
     login_ok = check("POST /auth/login", r.status_code, (200,), r.text)
     if not login_ok:
         print(f"\n{RED}Cannot continue without auth token. Check credentials.{RESET}")
-        exit(1)
+        sys.exit(1)
     
     TOKEN = r.json()["access_token"]
     headers = {"Authorization": f"Bearer {TOKEN}"}

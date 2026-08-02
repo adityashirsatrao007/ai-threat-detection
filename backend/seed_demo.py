@@ -2,8 +2,10 @@
 SentinelX Demo Seed Script
 Populates the database with realistic threat and alert data via the live API.
 """
-import httpx
+import sys
 import time
+
+import httpx
 
 BASE_URL = "http://localhost:8000/api/v1"
 EMAIL = "demo@sentinelx.com"
@@ -135,7 +137,7 @@ if __name__ == "__main__":
         print("✅ Login successful.")
     except Exception as e:
         print(f"❌ Login failed: {e}")
-        exit(1)
+        sys.exit(1)
 
     n = seed_threats(token)
     print(f"\n✅ Seeding complete! Created {n} threats.")

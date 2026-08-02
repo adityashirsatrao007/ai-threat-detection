@@ -3,18 +3,19 @@ Alembic Environment Configuration
 Integrates SQLAlchemy models with Alembic migration engine.
 """
 
-from logging.config import fileConfig
-from sqlalchemy import engine_from_config, pool
-from alembic import context
-import sys
 import os
+import sys
+from logging.config import fileConfig
+
+from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 # Make the app importable
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.database.base import Base
-from app.database.models import *  # noqa: F401, F403 — import models for metadata
 from app.core.config import settings
+from app.database.base import Base
+from app.database.models import *
 
 config = context.config
 

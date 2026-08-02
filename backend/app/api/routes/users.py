@@ -12,18 +12,17 @@ DELETE /users/me/devices/{id}   — Remove a device
 from __future__ import annotations
 
 import uuid
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from app.core.logging import get_logger
-from app.database.session import get_db
-from app.database.models.models import User, UserRole
 from app.api.dependencies.auth import get_current_user, require_role
-from app.services.user_service import user_service
+from app.core.logging import get_logger
+from app.database.models.models import User, UserRole
+from app.database.session import get_db
 from app.schemas.schemas import UserResponse
+from app.services.user_service import user_service
 
 logger = get_logger(__name__)
 
@@ -35,7 +34,7 @@ router = APIRouter(prefix="/users", tags=["User Management"])
 class DeviceRegisterRequest(BaseModel):
     device_name: str = Field(..., min_length=1, max_length=255)
     platform: str = Field(..., pattern="^(ios|android|web|desktop)$")
-    device_token: Optional[str] = Field(default=None, max_length=512)
+    device_token: str | None = Field(default=None, max_length=512)
 
 
 class DeviceResponse(BaseModel):
@@ -52,7 +51,7 @@ class DeviceResponse(BaseModel):
 
 @router.get(
     "",
-    response_model=List[UserResponse],
+    response_model=list[UserResponse],
     summary="List users in your organization",
 )
 def list_users(
@@ -60,7 +59,7 @@ def list_users(
     limit: int = Query(50, ge=1, le=200),
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role([UserRole.soc, UserRole.sysadmin])),
-) -> List[UserResponse]:
+) -> list[UserResponse]:
     """SOC admins see users in their org. Sysadmins see everyone."""
     return user_service.get_all_users(db, current_user, skip=skip, limit=limit)
 

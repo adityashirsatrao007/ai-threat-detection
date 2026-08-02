@@ -1,0 +1,6 @@
+[lint]
+select = ["E", "F", "I", "UP"]
+ignore = ["B008", "S110", "S112", "G201", "E501"]
+
+[lint.per-file-ignores]
+"backend/alembic/env.py" = ["F403", "F401"]

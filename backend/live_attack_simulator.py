@@ -1,7 +1,8 @@
-import httpx
-import time
 import random
 import sys
+import time
+
+import httpx
 
 BASE_URL = "http://localhost:8000/api/v1"
 EMAIL = "demo@sentinelx.com"

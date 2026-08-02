@@ -10,13 +10,13 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
-from app.database.session import get_db
-from app.database.models.models import User
 from app.api.dependencies.auth import get_current_user
-from app.services.dashboard_service import dashboard_service
-from app.schemas.schemas import DashboardStats, ThreatListResponse, DashboardTrends
-from app.schemas.analytics import TargetAnalyticsResponse
 from app.core.logging import get_logger
+from app.database.models.models import User
+from app.database.session import get_db
+from app.schemas.analytics import TargetAnalyticsResponse
+from app.schemas.schemas import DashboardStats, DashboardTrends, ThreatListResponse
+from app.services.dashboard_service import dashboard_service
 
 logger = get_logger(__name__)
 

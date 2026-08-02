@@ -1,8 +1,10 @@
 import sys
+
 sys.path.insert(0, "/Users/surajbayas/Developer/SentinelX/backend")
 
-from app.database.session import SessionLocal
 from app.database.models.models import User
+from app.database.session import SessionLocal
+
 
 def reset_password():
     db = SessionLocal()

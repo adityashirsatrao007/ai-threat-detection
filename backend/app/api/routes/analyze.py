@@ -7,26 +7,36 @@ POST /transcribe/audio — Transcribe audio file via Whisper
 """
 
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status, BackgroundTasks, Request
-from sqlalchemy.orm import Session
 import json
 import os
 
-from app.database.session import get_db
-from app.database.models.models import User, Threat
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    File,
+    HTTPException,
+    Request,
+    UploadFile,
+    status,
+)
+from sqlalchemy.orm import Session
+
 from app.api.dependencies.auth import get_current_user
-from app.services.email_service import email_service
-from app.services.sms_service import sms_service
-from app.services.call_service import call_service
-from app.services.alert_service import alert_service
+from app.core.logging import get_logger
+from app.database.models.models import Threat, User
+from app.database.session import get_db
 from app.schemas.schemas import (
+    CallAnalysisRequest,
     EmailAnalysisRequest,
     SMSAnalysisRequest,
-    CallAnalysisRequest,
     ThreatAnalysisResponse,
     TranscriptionResponse,
 )
-from app.core.logging import get_logger
+from app.services.alert_service import alert_service
+from app.services.call_service import call_service
+from app.services.email_service import email_service
+from app.services.sms_service import sms_service
 
 logger = get_logger(__name__)
 
@@ -188,7 +198,7 @@ def get_dataset_samples(
     if not os.path.exists(dataset_path):
         raise HTTPException(status_code=404, detail="Dataset not found. Please run prep_enron_dataset.py first.")
         
-    with open(dataset_path, "r") as f:
+    with open(dataset_path) as f:
         samples = json.load(f)
         
     if not samples:

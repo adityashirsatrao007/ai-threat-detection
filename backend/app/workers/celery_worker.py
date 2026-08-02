@@ -6,7 +6,6 @@ Background task queue for async email, SMS, and call analysis.
 from __future__ import annotations
 
 import uuid
-from typing import Optional
 
 from celery import Celery
 from celery.utils.log import get_task_logger
@@ -63,7 +62,7 @@ def analyze_email_task(
     sender: str,
     subject: str,
     body: str,
-    user_id: Optional[str] = None,
+    user_id: str | None = None,
 ) -> dict:
     """
     Celery task: async email threat analysis.
@@ -78,11 +77,11 @@ def analyze_email_task(
         Serialized ThreatAnalysisResponse dict
     """
     try:
-        from app.database.session import SessionLocal
-        from app.services.email_service import email_service
-        from app.services.alert_service import alert_service
-        from app.schemas.schemas import EmailAnalysisRequest
         from app.database.models.models import Threat
+        from app.database.session import SessionLocal
+        from app.schemas.schemas import EmailAnalysisRequest
+        from app.services.alert_service import alert_service
+        from app.services.email_service import email_service
 
         logger.info(f"[Task {self.request.id}] Analyzing email from {sender}")
 
@@ -116,15 +115,15 @@ def analyze_sms_task(
     self,
     sender: str,
     message: str,
-    user_id: Optional[str] = None,
+    user_id: str | None = None,
 ) -> dict:
     """Celery task: async SMS threat analysis."""
     try:
-        from app.database.session import SessionLocal
-        from app.services.sms_service import sms_service
-        from app.services.alert_service import alert_service
-        from app.schemas.schemas import SMSAnalysisRequest
         from app.database.models.models import Threat
+        from app.database.session import SessionLocal
+        from app.schemas.schemas import SMSAnalysisRequest
+        from app.services.alert_service import alert_service
+        from app.services.sms_service import sms_service
 
         logger.info(f"[Task {self.request.id}] Analyzing SMS from {sender}")
 
@@ -156,17 +155,17 @@ def analyze_sms_task(
 def analyze_call_task(
     self,
     transcript: str,
-    caller_id: Optional[str] = None,
-    duration_seconds: Optional[int] = None,
-    user_id: Optional[str] = None,
+    caller_id: str | None = None,
+    duration_seconds: int | None = None,
+    user_id: str | None = None,
 ) -> dict:
     """Celery task: async call transcript analysis."""
     try:
-        from app.database.session import SessionLocal
-        from app.services.call_service import call_service
-        from app.services.alert_service import alert_service
-        from app.schemas.schemas import CallAnalysisRequest
         from app.database.models.models import Threat
+        from app.database.session import SessionLocal
+        from app.schemas.schemas import CallAnalysisRequest
+        from app.services.alert_service import alert_service
+        from app.services.call_service import call_service
 
         logger.info(f"[Task {self.request.id}] Analyzing call from {caller_id}")
 

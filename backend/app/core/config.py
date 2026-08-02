@@ -3,11 +3,10 @@ SentinelX Core Configuration
 Loads all settings from environment variables or .env file.
 """
 
-from pydantic import field_validator
-from pydantic_settings import BaseSettings
-from typing import Optional
 from functools import lru_cache
 
+from pydantic import field_validator
+from pydantic_settings import BaseSettings
 
 _KNOWN_WEAK_SECRETS = {
     "change-me-in-production-use-256-bit-key",
@@ -45,7 +44,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     # ─── Encryption ───────────────────────────────────────────────────────────
-    ENCRYPTION_KEY: Optional[str] = None  # Fernet key for encrypting app passwords at rest
+    ENCRYPTION_KEY: str | None = None  # Fernet key for encrypting app passwords at rest
 
     # ─── CORS ─────────────────────────────────────────────────────────────────
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:5173"
@@ -67,13 +66,13 @@ class Settings(BaseSettings):
     USE_GPU: bool = False
 
     # ─── External APIs (Optional) ─────────────────────────────────────────────
-    VIRUSTOTAL_API_KEY: Optional[str] = None
-    PHISHTANK_API_KEY: Optional[str] = None
-    HF_API_TOKEN: Optional[str] = None
+    VIRUSTOTAL_API_KEY: str | None = None
+    PHISHTANK_API_KEY: str | None = None
+    HF_API_TOKEN: str | None = None
 
     # ─── Gmail (Optional) ─────────────────────────────────────────────────────
-    GMAIL_CLIENT_ID: Optional[str] = None
-    GMAIL_CLIENT_SECRET: Optional[str] = None
+    GMAIL_CLIENT_ID: str | None = None
+    GMAIL_CLIENT_SECRET: str | None = None
     GMAIL_REDIRECT_URI: str = "http://localhost:8000/api/v1/gmail/callback"
     FRONTEND_URL: str = "https://sentinelx-frontend-nu.vercel.app"
 
@@ -109,7 +108,7 @@ class Settings(BaseSettings):
         return v
 
 
-@lru_cache()
+@lru_cache
 def get_settings() -> Settings:
     """Return cached settings instance."""
     return Settings()

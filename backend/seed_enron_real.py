@@ -1,9 +1,10 @@
-import pandas as pd
 import email
-from email.policy import default
-import httpx
-import time
 import random
+import time
+from email.policy import default
+
+import httpx
+import pandas as pd
 
 BASE_URL = "http://localhost:8000/api/v1"
 EMAIL = "demo@sentinelx.com"

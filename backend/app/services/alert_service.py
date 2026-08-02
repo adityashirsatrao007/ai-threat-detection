@@ -8,15 +8,25 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime, timezone
-from typing import Optional
 
-from sqlalchemy.orm import Session
 from sqlalchemy import desc
+from sqlalchemy.orm import Session
 
-from app.database.models.models import Alert, Threat, AlertSeverity, ThreatLevel, User, UserRole
-from app.schemas.schemas import AlertResponse, AlertListResponse, AcknowledgeAlertResponse
 from app.core.config import settings
 from app.core.logging import get_logger
+from app.database.models.models import (
+    Alert,
+    AlertSeverity,
+    Threat,
+    ThreatLevel,
+    User,
+    UserRole,
+)
+from app.schemas.schemas import (
+    AcknowledgeAlertResponse,
+    AlertListResponse,
+    AlertResponse,
+)
 
 logger = get_logger(__name__)
 
@@ -32,7 +42,7 @@ LEVEL_TO_SEVERITY = {
 class AlertService:
     """Manages alert creation and lifecycle."""
 
-    def maybe_create_alert(self, threat: Threat, db: Session) -> Optional[Alert]:
+    def maybe_create_alert(self, threat: Threat, db: Session) -> Alert | None:
         """
         Create an alert for a threat if risk score exceeds the configured threshold.
 
@@ -99,7 +109,7 @@ class AlertService:
         alert_id: uuid.UUID,
         user: User,
         db: Session,
-    ) -> Optional[AcknowledgeAlertResponse]:
+    ) -> AcknowledgeAlertResponse | None:
         """Mark an alert as acknowledged by a user."""
         query = db.query(Alert).filter(Alert.id == alert_id)
         if user.role != UserRole.sysadmin:

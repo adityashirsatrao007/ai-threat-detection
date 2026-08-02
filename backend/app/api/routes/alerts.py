@@ -11,12 +11,12 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
-from app.database.session import get_db
-from app.database.models.models import User
 from app.api.dependencies.auth import get_current_user
-from app.services.alert_service import alert_service
-from app.schemas.schemas import AlertListResponse, AcknowledgeAlertResponse
 from app.core.logging import get_logger
+from app.database.models.models import User
+from app.database.session import get_db
+from app.schemas.schemas import AcknowledgeAlertResponse, AlertListResponse
+from app.services.alert_service import alert_service
 
 logger = get_logger(__name__)
 

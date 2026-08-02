@@ -7,7 +7,6 @@ Scaled to a 1–10 band as per user requirements.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
 
 from app.core.config import settings
 from app.core.logging import get_logger
@@ -22,7 +21,7 @@ class RiskScoreResult:
     threat_detected: bool
     confidence: float          # 0–1
     classification_label: str
-    reasons: List[str]
+    reasons: list[str]
     nlp_score: float
     behavior_score: float
     url_score: float
@@ -53,8 +52,8 @@ class RiskEngine:
         reputation_score: float,
         nlp_label: str,
         nlp_confidence: float,
-        behavior_reasons: List[str],
-        url_reasons: List[str],
+        behavior_reasons: list[str],
+        url_reasons: list[str],
     ) -> RiskScoreResult:
         """
         Compute composite risk score (1-10) and classify threat level.
@@ -109,7 +108,7 @@ class RiskEngine:
         )
 
         # Merge reasons
-        all_reasons: List[str] = []
+        all_reasons: list[str] = []
         if nlp_label != "safe":
             all_reasons.append(f"NLP classified as '{nlp_label}' (score: {nlp_10:.1f}/10)")
         all_reasons.extend(behavior_reasons)

@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import List, Optional
 from urllib.parse import urlparse
 
 import httpx
@@ -57,15 +56,15 @@ class URLAnalysisResult:
     is_shortened: bool = False
     suspicious_tld: bool = False
     keyword_hits: int = 0
-    virustotal_malicious: Optional[bool] = None
+    virustotal_malicious: bool | None = None
     heuristic_score: float = 0.0
-    reasons: List[str] = field(default_factory=list)
+    reasons: list[str] = field(default_factory=list)
 
 
 class URLDetector:
     """Extracts and scores URLs for malicious indicators."""
 
-    def extract_urls(self, text: str) -> List[str]:
+    def extract_urls(self, text: str) -> list[str]:
         """Extract all HTTP/HTTPS URLs from a body of text."""
         return list(set(URL_REGEX.findall(text)))
 
@@ -114,7 +113,7 @@ class URLDetector:
         result.heuristic_score = round(min(score, 100.0), 2)
         return result
 
-    def analyze_all(self, text: str) -> tuple[List[str], float, List[str]]:
+    def analyze_all(self, text: str) -> tuple[list[str], float, list[str]]:
         """
         Extract all URLs from text and compute aggregate URL threat score.
 
@@ -126,7 +125,7 @@ class URLDetector:
             return [], 0.0, []
 
         results = [self.analyze_url(u) for u in urls]
-        all_reasons: List[str] = []
+        all_reasons: list[str] = []
         max_score = 0.0
 
         for r in results:
@@ -135,7 +134,7 @@ class URLDetector:
 
         return urls, round(max_score, 2), list(set(all_reasons))
 
-    async def query_virustotal(self, url: str) -> Optional[bool]:
+    async def query_virustotal(self, url: str) -> bool | None:
         """
         Query VirusTotal URL scan endpoint.
         Returns True if malicious, False if clean, None if unavailable.

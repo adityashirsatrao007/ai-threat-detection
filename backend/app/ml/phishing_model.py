@@ -7,14 +7,13 @@ Covers SMS scams, UPI fraud, KYC phishing, lottery scams, and more.
 from __future__ import annotations
 
 import re
-from typing import Dict, Tuple
 
 from app.core.logging import get_logger
 
 logger = get_logger(__name__)
 
 # ─── Label mapping (score when label is detected) ────────────────────────────
-LABEL_SCORES: Dict[str, float] = {
+LABEL_SCORES: dict[str, float] = {
     "safe": 0.0,
     "phishing": 85.0,
     "scam": 75.0,
@@ -110,11 +109,11 @@ class PhishingModel:
     Catches SMS scams, UPI fraud, KYC phishing, lottery scams, and more.
     """
 
-    def classify(self, text: str) -> Tuple[str, float, float]:
+    def classify(self, text: str) -> tuple[str, float, float]:
         """Classify text into a threat label with score and confidence."""
         return self._classify_with_heuristics(text)
 
-    def _classify_with_heuristics(self, text: str) -> Tuple[str, float, float]:
+    def _classify_with_heuristics(self, text: str) -> tuple[str, float, float]:
         """Enhanced keyword-regex heuristic classifier."""
         matches = sum(1 for p in COMPILED_PATTERNS if p.search(text))
         total_patterns = len(COMPILED_PATTERNS)

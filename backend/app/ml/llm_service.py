@@ -3,9 +3,10 @@ LLM Inference Service
 Integrates Qwen 2.5 via Hugging Face Inference API for advanced threat analysis.
 """
 
-from typing import Dict, Optional
-import httpx
 import json
+
+import httpx
+
 from app.core.config import settings
 from app.core.logging import get_logger
 
@@ -62,7 +63,7 @@ class LLMService:
             "Content-Type": "application/json"
         }
 
-    async def analyze_text_async(self, text: str) -> Optional[Dict]:
+    async def analyze_text_async(self, text: str) -> dict | None:
         """Async analysis using httpx.AsyncClient."""
         if not self.enabled:
             return None
@@ -79,7 +80,7 @@ class LLMService:
             logger.error(f"LLM async inference failed: {e}")
             return None
 
-    def analyze_text(self, text: str) -> Optional[Dict]:
+    def analyze_text(self, text: str) -> dict | None:
         """Synchronous analysis using httpx.Client."""
         if not self.enabled:
             return None
@@ -96,7 +97,7 @@ class LLMService:
             logger.error(f"LLM sync inference failed: {e}")
             return None
 
-    def _handle_response(self, response: httpx.Response) -> Optional[Dict]:
+    def _handle_response(self, response: httpx.Response) -> dict | None:
         if response.status_code != 200:
             logger.error(f"HF API error: {response.status_code} - {response.text}")
             return None

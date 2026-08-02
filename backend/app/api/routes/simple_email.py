@@ -13,19 +13,19 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
+from cryptography.fernet import Fernet
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from cryptography.fernet import Fernet
 
-from app.core.logging import get_logger
-from app.core.config import settings
-from app.database.session import get_db
-from app.database.models.models import EmailAccount, User
 from app.api.dependencies.auth import get_current_user
-from app.services.simple_gmail_service import simple_gmail_service
-from app.services.email_service import email_service
+from app.core.config import settings
+from app.core.logging import get_logger
+from app.database.models.models import EmailAccount, User
+from app.database.session import get_db
 from app.schemas.schemas import EmailAnalysisRequest
+from app.services.email_service import email_service
+from app.services.simple_gmail_service import simple_gmail_service
 
 
 def _get_fernet() -> Fernet | None:

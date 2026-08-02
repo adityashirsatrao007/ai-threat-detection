@@ -6,7 +6,6 @@ Admin/SOC-level operations for managing users within an organization.
 from __future__ import annotations
 
 import uuid
-from typing import List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -21,7 +20,7 @@ class UserService:
 
     def get_all_users(
         self, db: Session, requesting_user: User, skip: int = 0, limit: int = 100
-    ) -> List[UserResponse]:
+    ) -> list[UserResponse]:
         """
         Admin/SOC-scoped user listing.
         - sysadmin: sees all users
@@ -42,7 +41,7 @@ class UserService:
 
     def get_user_by_id(
         self, db: Session, user_id: uuid.UUID, requesting_user: User
-    ) -> Optional[User]:
+    ) -> User | None:
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
             return None
@@ -54,7 +53,7 @@ class UserService:
 
     def deactivate_user(
         self, db: Session, user_id: uuid.UUID, requesting_user: User
-    ) -> Optional[User]:
+    ) -> User | None:
         user = self.get_user_by_id(db, user_id, requesting_user)
         if not user:
             return None
@@ -66,7 +65,7 @@ class UserService:
 
     def reactivate_user(
         self, db: Session, user_id: uuid.UUID, requesting_user: User
-    ) -> Optional[User]:
+    ) -> User | None:
         user = self.get_user_by_id(db, user_id, requesting_user)
         if not user:
             return None
@@ -82,7 +81,7 @@ class UserService:
         user: User,
         device_name: str,
         platform: str,
-        device_token: Optional[str] = None,
+        device_token: str | None = None,
     ) -> Device:
         """Register or update a device for a user."""
         # Upsert by device_token if provided
@@ -110,7 +109,7 @@ class UserService:
         logger.info(f"Device '{device_name}' registered for user {user.email}")
         return device
 
-    def list_devices(self, db: Session, user: User) -> List[Device]:
+    def list_devices(self, db: Session, user: User) -> list[Device]:
         return db.query(Device).filter(Device.user_id == user.id, Device.is_active).all()
 
     def remove_device(self, db: Session, device_id: uuid.UUID, user: User) -> bool:
@@ -122,7 +121,7 @@ class UserService:
         logger.info(f"Device {device_id} removed for user {user.email}")
         return True
 
-    def list_email_accounts(self, db: Session, user: User) -> List[EmailAccount]:
+    def list_email_accounts(self, db: Session, user: User) -> list[EmailAccount]:
         return (
             db.query(EmailAccount)
             .filter(EmailAccount.user_id == user.id, EmailAccount.is_active)

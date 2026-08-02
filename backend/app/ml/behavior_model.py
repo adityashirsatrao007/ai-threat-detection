@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import Dict, List
 
 from app.core.logging import get_logger
 
@@ -16,7 +15,7 @@ logger = get_logger(__name__)
 
 # ─── Behavioral Pattern Definitions ──────────────────────────────────────────
 
-BEHAVIOR_PATTERNS: Dict[str, List[str]] = {
+BEHAVIOR_PATTERNS: dict[str, list[str]] = {
     "urgency": [
         r"\b(urgent(ly)?|immediately|right now|act now|as soon as possible|asap)\b",
         r"\b(expires?\s+(today|soon|in\s+\d+\s+hour))\b",
@@ -74,7 +73,7 @@ BEHAVIOR_PATTERNS: Dict[str, List[str]] = {
 }
 
 # Weight each category contributes to behavioral score
-CATEGORY_WEIGHTS: Dict[str, float] = {
+CATEGORY_WEIGHTS: dict[str, float] = {
     "urgency": 15.0,
     "authority_impersonation": 20.0,
     "emotional_pressure": 15.0,
@@ -87,7 +86,7 @@ CATEGORY_WEIGHTS: Dict[str, float] = {
 }
 
 # Pre-compile all patterns
-COMPILED_BEHAVIORS: Dict[str, List[re.Pattern]] = {
+COMPILED_BEHAVIORS: dict[str, list[re.Pattern]] = {
     category: [re.compile(p, re.IGNORECASE) for p in patterns]
     for category, patterns in BEHAVIOR_PATTERNS.items()
 }
@@ -96,9 +95,9 @@ COMPILED_BEHAVIORS: Dict[str, List[re.Pattern]] = {
 @dataclass
 class BehaviorAnalysisResult:
     behavioral_score: float
-    detected_categories: List[str] = field(default_factory=list)
-    reasons: List[str] = field(default_factory=list)
-    hit_counts: Dict[str, int] = field(default_factory=dict)
+    detected_categories: list[str] = field(default_factory=list)
+    reasons: list[str] = field(default_factory=list)
+    hit_counts: dict[str, int] = field(default_factory=dict)
 
 
 class BehaviorModel:
@@ -117,9 +116,9 @@ class BehaviorModel:
             BehaviorAnalysisResult with score (0-100) and detected categories.
         """
         total_score = 0.0
-        detected: List[str] = []
-        reasons: List[str] = []
-        hit_counts: Dict[str, int] = {}
+        detected: list[str] = []
+        reasons: list[str] = []
+        hit_counts: dict[str, int] = {}
 
         for category, patterns in COMPILED_BEHAVIORS.items():
             hits = sum(1 for p in patterns if p.search(text))

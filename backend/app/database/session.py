@@ -3,10 +3,11 @@ Database Session Management
 Optimised for Neon serverless PostgreSQL (cloud, high-latency connections).
 """
 
+from collections.abc import Generator
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import QueuePool
-from typing import Generator
 
 from app.core.config import settings
 from app.core.logging import get_logger

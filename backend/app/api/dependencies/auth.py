@@ -10,17 +10,15 @@ from __future__ import annotations
 
 import uuid
 from functools import lru_cache
-from typing import Optional, List
 
-from fastapi import Depends, HTTPException, status, Query
+from fastapi import Depends, HTTPException, Query, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-
 from sqlalchemy.orm import Session
 
-from app.core.security import decode_access_token
-from app.database.session import get_db
-from app.database.models.models import User, UserRole
 from app.core.logging import get_logger
+from app.core.security import decode_access_token
+from app.database.models.models import User, UserRole
+from app.database.session import get_db
 
 logger = get_logger(__name__)
 
@@ -32,14 +30,14 @@ bearer_scheme = HTTPBearer(auto_error=True)
 # Cache the decoded JWT payload (pure CPU work, no I/O) to avoid re-decoding
 # the HMAC signature on every request.  maxsize=512 covers ~512 concurrent sessions.
 @lru_cache(maxsize=512)
-def _decode_token_cached(token: str) -> Optional[dict]:
+def _decode_token_cached(token: str) -> dict | None:
     """Decode and cache a JWT payload. Returns None if invalid/expired."""
     return decode_access_token(token)
 
 
 def get_current_user(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(HTTPBearer(auto_error=False)),
-    token_query: Optional[str] = Query(None, alias="token"),
+    credentials: HTTPAuthorizationCredentials | None = Depends(HTTPBearer(auto_error=False)),
+    token_query: str | None = Query(None, alias="token"),
     db: Session = Depends(get_db),
 ) -> User:
     """
@@ -64,7 +62,7 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user_id_str: Optional[str] = payload.get("sub")
+    user_id_str: str | None = payload.get("sub")
     if not user_id_str:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -90,7 +88,7 @@ def get_current_user(
     return user
 
 
-def require_role(roles: List[UserRole]):
+def require_role(roles: list[UserRole]):
     """
     Returns a FastAPI dependency that validates the current user has one of
     the specified roles.  Raises 403 Forbidden otherwise.

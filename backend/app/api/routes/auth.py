@@ -6,23 +6,23 @@ GET  /auth/me        — Return current user profile
 """
 
 
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
-from app.core.security import hash_password, verify_password, create_access_token
-from app.core.config import settings
-from app.database.session import get_db
-from app.database.models.models import User, UserRole
-from app.schemas.schemas import (
-    UserRegisterRequest,
-    UserLoginRequest,
-    TokenResponse,
-    UserResponse,
-    UserInviteRequest,
-)
-from typing import List
 from app.api.dependencies.auth import get_current_user, require_role
+from app.core.config import settings
 from app.core.logging import get_logger
+from app.core.security import create_access_token, hash_password, verify_password
+from app.database.models.models import User, UserRole
+from app.database.session import get_db
+from app.schemas.schemas import (
+    TokenResponse,
+    UserInviteRequest,
+    UserLoginRequest,
+    UserRegisterRequest,
+    UserResponse,
+)
 
 logger = get_logger(__name__)
 
@@ -139,13 +139,13 @@ def me(current_user: User = Depends(get_current_user)) -> UserResponse:
 
 @router.get(
     "/users",
-    response_model=List[UserResponse],
+    response_model=list[UserResponse],
     summary="List all users in the organization (SOC only)",
 )
 def list_org_users(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role([UserRole.soc, UserRole.sysadmin]))
-) -> List[UserResponse]:
+) -> list[UserResponse]:
     if not current_user.organization_id:
         return []
     users = db.query(User).filter(User.organization_id == current_user.organization_id).all()

@@ -1,19 +1,21 @@
+import email
+import json
 import os
 import sys
-import json
-import email
 from email import policy
-import pandas as pd
+
 import kagglehub
+import pandas as pd
 
 # Add the backend directory to path so we can import app modules
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Import SentinelX ML engines
-from app.ml.phishing_model import phishing_model
 from app.ml.behavior_model import behavior_model
-from app.ml.url_detector import url_detector
+from app.ml.phishing_model import phishing_model
 from app.ml.risk_engine import risk_engine
+from app.ml.url_detector import url_detector
+
 
 def parse_raw_email(raw_content):
     """Parses raw email string into subject and body."""
@@ -121,7 +123,7 @@ def main():
         behavior_result = behavior_model.analyze(full_text)
         
         # URL Analysis
-        extracted_urls, url_score, url_reasons = url_detector.analyze_all(full_text)
+        _extracted_urls, url_score, url_reasons = url_detector.analyze_all(full_text)
         
         # Reputation Scoring (use "email" channel)
         reputation_score = risk_engine.compute_reputation_score(em['sender'], channel="email")

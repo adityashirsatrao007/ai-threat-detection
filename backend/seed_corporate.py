@@ -2,8 +2,9 @@
 SentinelX Corporate Spear-phishing Seeder (Enron Style)
 Populates the database with high-end, realistic corporate threat data.
 """
-import httpx
 import time
+
+import httpx
 
 BASE_URL = "http://localhost:8000/api/v1"
 EMAIL = "demo@sentinelx.com"

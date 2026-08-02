@@ -1,13 +1,15 @@
 import os
-from sqlalchemy import create_engine, text
+import sys
+
 from dotenv import load_dotenv
+from sqlalchemy import create_engine, text
 
 load_dotenv("backend/.env")
 db_url = os.getenv("DATABASE_URL")
 
 if not db_url:
     print("DATABASE_URL not found in .env")
-    exit(1)
+    sys.exit(1)
 
 # SQLAlchemy psycopg URL fix if needed
 if db_url.startswith("postgresql://"):

@@ -7,7 +7,6 @@ Supports both OAuth Gmail accounts AND simple IMAP (App Password) accounts.
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import List
 
 from sqlalchemy.orm import Session
 
@@ -33,7 +32,7 @@ class PollingService:
         """
         db: Session = SessionLocal()
         try:
-            accounts: List[EmailAccount] = (
+            accounts: list[EmailAccount] = (
                 db.query(EmailAccount)
                 .filter(EmailAccount.is_active)
                 .filter(EmailAccount.provider.in_(["gmail", "gmail_imap"]))
@@ -123,8 +122,8 @@ class PollingService:
         """
         Run a single fetched email through the full threat analysis pipeline.
         """
-        from app.services.email_service import email_service
         from app.schemas.schemas import EmailAnalysisRequest
+        from app.services.email_service import email_service
 
         try:
             request = EmailAnalysisRequest(

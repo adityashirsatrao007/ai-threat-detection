@@ -5,8 +5,8 @@ High-level orchestration entry point for risk computation (used by Celery tasks)
 
 from __future__ import annotations
 
-from app.ml.risk_engine import risk_engine, RiskScoreResult
 from app.core.logging import get_logger
+from app.ml.risk_engine import RiskScoreResult, risk_engine
 
 logger = get_logger(__name__)
 

@@ -5,8 +5,8 @@ FastAPI Application Entry Point
 
 from __future__ import annotations
 
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,13 +14,23 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
+from app.api.middleware.logging import RequestLoggingMiddleware
+from app.api.routes import (
+    alerts,
+    analyze,
+    auth,
+    dashboard,
+    gmail,
+    remote,
+    simple_email,
+    users,
+)
 from app.core.config import settings
+
 # from app.core.limiter import limiter
-from app.core.logging import setup_logging, get_logger
+from app.core.logging import get_logger, setup_logging
 from app.database.base import Base
 from app.database.session import engine, warm_up_pool
-from app.api.routes import auth, analyze, alerts, dashboard, gmail, users, remote, simple_email
-from app.api.middleware.logging import RequestLoggingMiddleware
 
 # ─── Initialise logging first ─────────────────────────────────────────────────
 setup_logging()
@@ -36,6 +46,7 @@ def _start_gmail_scheduler() -> None:
     global _scheduler
     try:
         from apscheduler.schedulers.background import BackgroundScheduler
+
         from app.services.polling_service import polling_service
 
         _scheduler = BackgroundScheduler(daemon=True)
@@ -124,7 +135,7 @@ async def add_security_headers(request: Request, call_next):
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-    logger.error(f"Unhandled exception on {request.method} {request.url.path}: {exc}", exc_info=True)
+    logger.error(f"Unhandled exception on {request.method} {request.url.path}: {exc}")
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"success": False, "error": "Internal server error.", "detail": str(exc)},

@@ -5,19 +5,18 @@ Orchestrates NLP, behavioral, URL, and reputation analysis for email inputs.
 
 from __future__ import annotations
 
-from typing import Optional
 import uuid
 
 from sqlalchemy.orm import Session
 
-from app.ml.phishing_model import phishing_model
-from app.ml.behavior_model import behavior_model
-from app.ml.url_detector import url_detector
-from app.ml.risk_engine import risk_engine
-from app.ml.llm_service import llm_service
-from app.database.models.models import Threat, ThreatType, ThreatLevel
-from app.schemas.schemas import EmailAnalysisRequest, ThreatAnalysisResponse
 from app.core.logging import get_logger
+from app.database.models.models import Threat, ThreatLevel, ThreatType
+from app.ml.behavior_model import behavior_model
+from app.ml.llm_service import llm_service
+from app.ml.phishing_model import phishing_model
+from app.ml.risk_engine import risk_engine
+from app.ml.url_detector import url_detector
+from app.schemas.schemas import EmailAnalysisRequest, ThreatAnalysisResponse
 
 logger = get_logger(__name__)
 
@@ -29,7 +28,7 @@ class EmailService:
         self,
         request: EmailAnalysisRequest,
         db: Session,
-        user_id: Optional[uuid.UUID] = None,
+        user_id: uuid.UUID | None = None,
     ) -> ThreatAnalysisResponse:
         """
         Analyze an email for phishing/scam threats.

@@ -11,14 +11,14 @@ from __future__ import annotations
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 
+from app.api.dependencies.auth import get_current_user, require_role
 from app.core.config import settings
 from app.core.logging import get_logger
-from app.database.session import get_db
 from app.database.models.models import EmailAccount, User, UserRole
-from app.api.dependencies.auth import get_current_user, require_role
+from app.database.session import get_db
 from app.services.gmail_service import gmail_service
 
 logger = get_logger(__name__)

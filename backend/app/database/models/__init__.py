@@ -1,3 +1,3 @@
-from app.database.models.models import User, Threat, Alert, AuditLog
+from app.database.models.models import Alert, AuditLog, Threat, User
 
-__all__ = ["User", "Threat", "Alert", "AuditLog"]
+__all__ = ["Alert", "AuditLog", "Threat", "User"]

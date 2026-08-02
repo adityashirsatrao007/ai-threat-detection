@@ -1,18 +1,18 @@
+import time
+
 from fastapi import APIRouter, status
 from pydantic import BaseModel
-from typing import List, Optional
-import time
 
 router = APIRouter(prefix="/remote", tags=["Remote Control"])
 
 class RemoteEvent(BaseModel):
     id: int
     event_type: str
-    payload: Optional[dict] = None
+    payload: dict | None = None
     created_at: float
 
 # In-memory store for demo purposes (Hackathon ready)
-events_store: List[RemoteEvent] = []
+events_store: list[RemoteEvent] = []
 
 @router.post("/event", status_code=status.HTTP_201_CREATED)
 def push_event(event_data: dict):
@@ -34,7 +34,7 @@ def push_event(event_data: dict):
         
     return new_event
 
-@router.get("/events", response_model=List[RemoteEvent])
+@router.get("/events", response_model=list[RemoteEvent])
 def get_events(since_id: int = 0):
     """Retrieve new events since a specific ID (for polling)."""
     return [e for e in events_store if e.id > since_id]

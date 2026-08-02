@@ -7,10 +7,9 @@ Re-uses the core PhishingModel with SMS-specific keyword extensions.
 from __future__ import annotations
 
 import re
-from typing import List, Tuple
 
-from app.ml.phishing_model import phishing_model
 from app.core.logging import get_logger
+from app.ml.phishing_model import phishing_model
 
 logger = get_logger(__name__)
 
@@ -46,7 +45,7 @@ SMS_COMPILED = [re.compile(p, re.IGNORECASE) for p in SMS_SCAM_PATTERNS]
 class SMSModel:
     """SMS-specific scam detector."""
 
-    def classify(self, message: str) -> Tuple[str, float, float]:
+    def classify(self, message: str) -> tuple[str, float, float]:
         """
         Classify an SMS message.
 
@@ -69,7 +68,7 @@ class SMSModel:
 
         return label, nlp_score, confidence
 
-    def get_matched_patterns(self, message: str) -> List[str]:
+    def get_matched_patterns(self, message: str) -> list[str]:
         """Return list of matched SMS scam pattern descriptions."""
         matched = []
         descriptions = [

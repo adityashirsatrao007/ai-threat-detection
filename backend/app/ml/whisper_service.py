@@ -5,7 +5,6 @@ Uses Hugging Face Inference API exclusively (no local models).
 
 from __future__ import annotations
 
-from typing import Optional, Tuple
 import httpx
 
 from app.core.config import settings
@@ -24,7 +23,7 @@ class WhisperService:
         self.api_token = settings.HF_API_TOKEN
         self.hf_model_url = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
 
-    async def _transcribe_via_hf(self, audio_bytes: bytes) -> Optional[Tuple[str, Optional[str], Optional[float]]]:
+    async def _transcribe_via_hf(self, audio_bytes: bytes) -> tuple[str, str | None, float | None] | None:
         """Transcribe using Hugging Face Inference API."""
         if not self.api_token:
             return None
@@ -52,7 +51,7 @@ class WhisperService:
             logger.error(f"HF Whisper inference failed: {e}")
             return None
 
-    def transcribe_file(self, file_path: str) -> Tuple[str, Optional[str], Optional[float]]:
+    def transcribe_file(self, file_path: str) -> tuple[str, str | None, float | None]:
         """
         Transcribe an audio file (Synchronous).
         Requires HF API token.
@@ -75,7 +74,7 @@ class WhisperService:
             logger.error(f"HF Whisper sync inference failed: {e}")
             raise
 
-    async def transcribe_upload(self, audio_bytes: bytes, filename: str) -> Tuple[str, Optional[str], Optional[float]]:
+    async def transcribe_upload(self, audio_bytes: bytes, filename: str) -> tuple[str, str | None, float | None]:
         """
         Transcribe audio from uploaded bytes via HF Inference API.
         """

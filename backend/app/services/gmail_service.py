@@ -6,10 +6,10 @@ Handles Google OAuth2 flow and Gmail API email fetching.
 from __future__ import annotations
 
 import base64
-from typing import List, Optional, Dict, Any
+from typing import Any
 
-from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request as GoogleRequest
+from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -43,7 +43,7 @@ class GmailService:
         )
         return auth_url
 
-    def exchange_code_for_tokens(self, code: str) -> Dict[str, Any]:
+    def exchange_code_for_tokens(self, code: str) -> dict[str, Any]:
         """
         Exchange the OAuth authorization code for access + refresh tokens.
         Returns a dict with token data.
@@ -58,14 +58,14 @@ class GmailService:
             "token_expiry": credentials.expiry,
         }
 
-    def get_gmail_profile(self, access_token: str, refresh_token: Optional[str]) -> Dict[str, str]:
+    def get_gmail_profile(self, access_token: str, refresh_token: str | None) -> dict[str, str]:
         """Fetch the Gmail user's email address using the token."""
         creds = self._build_credentials(access_token, refresh_token)
         service = build("gmail", "v1", credentials=creds)
         profile = service.users().getProfile(userId="me").execute()
         return {"email_address": profile.get("emailAddress", "")}
 
-    def refresh_access_token(self, account: EmailAccount) -> Optional[str]:
+    def refresh_access_token(self, account: EmailAccount) -> str | None:
         """
         Refresh the Google access token using the stored refresh_token.
         Updates the EmailAccount in-place. Returns new access_token or None if failed.
@@ -92,7 +92,7 @@ class GmailService:
         self,
         account: EmailAccount,
         max_results: int = 20,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Fetch unread emails from Gmail since last_synced_at.
         Returns a list of parsed email dicts.
@@ -154,7 +154,7 @@ class GmailService:
         )
 
     def _build_credentials(
-        self, access_token: str, refresh_token: Optional[str]
+        self, access_token: str, refresh_token: str | None
     ) -> Credentials:
         return Credentials(
             token=access_token,
@@ -165,7 +165,7 @@ class GmailService:
             scopes=settings.GOOGLE_SCOPES,
         )
 
-    def _parse_message(self, msg: Dict) -> Dict[str, Any]:
+    def _parse_message(self, msg: dict) -> dict[str, Any]:
         """Extract sender, subject, body, and URLs from a raw Gmail message."""
         headers = {h["name"]: h["value"] for h in msg.get("payload", {}).get("headers", [])}
         body = self._extract_body(msg.get("payload", {}))
@@ -179,7 +179,7 @@ class GmailService:
             "body": body,
         }
 
-    def _extract_body(self, payload: Dict) -> str:
+    def _extract_body(self, payload: dict) -> str:
         """Recursively extract plain text body from Gmail message payload."""
         mime_type = payload.get("mimeType", "")
         body_data = payload.get("body", {}).get("data", "")

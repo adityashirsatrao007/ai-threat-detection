@@ -3,9 +3,9 @@ SentinelX Logging Configuration
 Structured JSON-format logging for production observability.
 """
 
+import json
 import logging
 import sys
-import json
 from datetime import datetime, timezone
 from typing import Any
 

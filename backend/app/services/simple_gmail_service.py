@@ -6,11 +6,11 @@ User just provides email + app password.
 
 from __future__ import annotations
 
-import imaplib
 import email as email_lib
-from email.header import decode_header
+import imaplib
 from datetime import datetime
-from typing import List, Dict, Any, Optional
+from email.header import decode_header
+from typing import Any
 
 from app.core.logging import get_logger
 
@@ -42,8 +42,8 @@ class SimpleGmailService:
         email_address: str,
         app_password: str,
         max_results: int = 20,
-        since_date: Optional[datetime] = None,
-    ) -> List[Dict[str, Any]]:
+        since_date: datetime | None = None,
+    ) -> list[dict[str, Any]]:
         """
         Fetch recent unread emails via IMAP.
         Returns list of dicts with sender, subject, body, date.
@@ -93,7 +93,7 @@ class SimpleGmailService:
             logger.error(f"Unexpected IMAP error: {exc}")
             return []
 
-    def _parse_email(self, msg: email_lib.message.Message) -> Optional[Dict[str, Any]]:
+    def _parse_email(self, msg: email_lib.message.Message) -> dict[str, Any] | None:
         """Parse an email.message.Message into a clean dict."""
         try:
             # Decode subject

@@ -2,7 +2,7 @@ services:
   - type: web
     name: sentinelx-api
     runtime: docker
-    repo: https://github.com/adityashirsatrao/sentinelx-threat-intel
+    repo: https://github.com/adityashirsatrao007/ai-threat-detection
     plan: free
     dockerfilePath: ./backend/Dockerfile
     healthCheckPath: /health

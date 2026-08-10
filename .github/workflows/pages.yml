@@ -21,6 +21,8 @@ jobs:
         working-directory: frontend
         env:
           VITE_API_URL: https://sentinelx-api-2nzs.onrender.com/api/v1
+      - run: cp dist/index.html dist/404.html
+        working-directory: frontend
       - uses peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

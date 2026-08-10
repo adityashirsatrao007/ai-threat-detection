@@ -22,7 +22,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('sentinelx_token');
-      window.location.href = '/login';
+      window.location.href = `${import.meta.env.VITE_BASE_PATH || '/ai-threat-detection'}/login`;
     }
     return Promise.reject(error);
   }

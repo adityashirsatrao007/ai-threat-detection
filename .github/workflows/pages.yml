@@ -21,6 +21,7 @@ jobs:
         working-directory: frontend
         env:
           VITE_API_URL: https://car-oven-rely-dramatically.trycloudflare.com/api/v1
+          VITE_BASE_PATH: /ai-threat-detection
       - run: cp dist/index.html dist/404.html
         working-directory: frontend
       - uses: peaceiris/actions-gh-pages@v4

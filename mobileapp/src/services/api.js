@@ -1,8 +1,8 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-// Production backend on Render — works from any network, forever
-const API_URL = 'https://sentinelx-api-2nzs.onrender.com/api/v1';
+// Production backend — live cloudflared tunnel
+const API_URL = 'https://gardens-framing-pledge-horizon.trycloudflare.com/api/v1';
 console.log('[API] Base URL:', API_URL);
 
 const api = axios.create({

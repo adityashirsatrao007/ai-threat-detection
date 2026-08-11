@@ -1,8 +1,8 @@
 /// SentinelX API Configuration
-/// Pointing to hosted backend on Render
+/// Pointing to live cloudflared tunnel backend
 class ApiConfig {
   // ─── Production Backend ────────────────────────────────────────────────────
-  static const String baseUrl = 'https://sentinelx-48vt.onrender.com';
+  static const String baseUrl = 'https://gardens-framing-pledge-horizon.trycloudflare.com';
   static const String apiUrl = '$baseUrl/api/v1';
 
   // ─── Endpoints ─────────────────────────────────────────────────────────────

@@ -31,7 +31,7 @@ export default function LoginScreen() {
     onSuccess: async (res) => {
       const token = res.data.access_token;
       // Fetch user profile after login
-      const userRes = await authAPI.me();
+      const userRes = await authAPI.me(token);
       login(token, userRes.data);
     },
     onError: (err) => {
@@ -47,7 +47,7 @@ export default function LoginScreen() {
       // Auto-login after registration
       const res = await authAPI.login(email.trim(), password);
       const token = res.data.access_token;
-      const userRes = await authAPI.me();
+      const userRes = await authAPI.me(token);
       login(token, userRes.data);
     },
     onError: (err) => {

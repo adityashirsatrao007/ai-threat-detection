@@ -37,7 +37,8 @@ export const authAPI = {
     api.post('/auth/register', { name, email, password, role: 'user' }),
   login: (email, password) =>
     api.post('/auth/login', { email, password }),
-  me: () => api.get('/auth/me'),
+  me: (token) =>
+    api.get('/auth/me', token ? { headers: { Authorization: `Bearer ${token}` } } : undefined),
 };
 
 // Dashboard endpoints

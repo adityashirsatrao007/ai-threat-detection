@@ -63,7 +63,7 @@ export default function HomeScreen() {
 
   const threats = threatsData?.threats || [];
   const alerts = alertsData?.alerts || [];
-  const unackCount = alerts.filter(a => !a.is_acknowledged).length;
+  const unackCount = alerts.filter(a => !a.acknowledged).length;
 
   const renderStatCard = (label, value, icon, color) => (
     <View style={styles.statCard} key={label}>
@@ -76,24 +76,25 @@ export default function HomeScreen() {
   );
 
   const renderThreat = ({ item }) => {
-    const isCritical = item.risk_score > 85;
-    const color = isCritical ? '#ef4444' : item.risk_score > 60 ? '#f59e0b' : '#10b981';
+    const score = item.risk_score || 0;
+    const isCritical = score > 8.5;
+    const color = isCritical ? '#ef4444' : score > 6 ? '#f59e0b' : '#10b981';
     return (
       <View style={[styles.threatCard, { borderColor: `${color}30` }]}>
         <View style={styles.threatHeader}>
           <View style={[styles.riskBadge, { backgroundColor: `${color}15` }]}>
             <Ionicons name="warning" size={14} color={color} />
-            <Text style={[styles.riskText, { color }]}>Risk {item.risk_score}/100</Text>
+            <Text style={[styles.riskText, { color }]}>Risk {score.toFixed(1)}/10</Text>
           </View>
           <Text style={styles.threatTime}>
-            {item.detected_at ? new Date(item.detected_at).toLocaleTimeString() : ''}
+            {item.created_at ? new Date(item.created_at).toLocaleTimeString() : ''}
           </Text>
         </View>
-        <Text style={styles.threatTitle} numberOfLines={2}>{item.alert_reason || item.content || 'Unknown threat'}</Text>
+        <Text style={styles.threatTitle} numberOfLines={2}>{item.content_excerpt || item.sender || 'Unknown threat'}</Text>
         <View style={styles.threatMeta}>
           <View style={styles.metaChip}>
             <Ionicons name="apps-outline" size={12} color="#64748b" />
-            <Text style={styles.metaText}>{item.app_source || item.source || 'Unknown'}</Text>
+            <Text style={styles.metaText}>{item.channel || 'Unknown'}</Text>
           </View>
           {item.sender && (
             <View style={styles.metaChip}>
@@ -109,12 +110,12 @@ export default function HomeScreen() {
   const renderAlert = ({ item }) => (
     <View style={styles.alertCard}>
       <View style={{ flex: 1 }}>
-        <Text style={styles.alertTitle} numberOfLines={1}>{item.reason || item.message || 'Alert'}</Text>
+        <Text style={styles.alertTitle} numberOfLines={1}>{item.title || 'Alert'}</Text>
         <Text style={styles.alertTime}>
           {item.created_at ? new Date(item.created_at).toLocaleString() : ''}
         </Text>
       </View>
-      {!item.is_acknowledged && (
+      {!item.acknowledged && (
         <TouchableOpacity
           style={styles.ackButton}
           onPress={() => ackMutation.mutate(item.id)}
@@ -158,14 +159,14 @@ export default function HomeScreen() {
         ) : (
           <View style={styles.statsRow}>
             {renderStatCard('Total Threats', stats?.total_threats, 'skull-outline', '#ef4444')}
-            {renderStatCard('Alerts', stats?.total_alerts, 'notifications', '#f59e0b')}
+            {renderStatCard('Alerts', stats?.high_risk_alerts, 'notifications', '#f59e0b')}
             {renderStatCard('Unread', unackCount, 'alert-circle', '#8b5cf6')}
-            {renderStatCard('Targets', stats?.total_targets, 'people-outline', '#3b82f6')}
+            {renderStatCard('Avg Risk', stats?.avg_risk_score?.toFixed?.(1) ?? stats?.avg_risk_score, 'people-outline', '#3b82f6')}
           </View>
         )}
 
         {/* Pending Alerts */}
-        {alerts.filter(a => !a.is_acknowledged).length > 0 && (
+        {alerts.filter(a => !a.acknowledged).length > 0 && (
           <>
             <View style={styles.sectionRow}>
               <Text style={styles.sectionLabel}>PENDING ALERTS</Text>
@@ -176,7 +177,7 @@ export default function HomeScreen() {
               )}
             </View>
             <FlatList
-              data={alerts.filter(a => !a.is_acknowledged).slice(0, 5)}
+              data={alerts.filter(a => !a.acknowledged).slice(0, 5)}
               keyExtractor={item => item.id?.toString()}
               renderItem={renderAlert}
               scrollEnabled={false}

@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 // Production backend — live cloudflared tunnel
-const API_URL = 'https://gardens-framing-pledge-horizon.trycloudflare.com/api/v1';
+const API_URL = 'https://shoulder-asylum-anna-measure.trycloudflare.com/api/v1';
 console.log('[API] Base URL:', API_URL);
 
 const api = axios.create({

@@ -2,7 +2,7 @@
 /// Pointing to live cloudflared tunnel backend
 class ApiConfig {
   // ─── Production Backend ────────────────────────────────────────────────────
-  static const String baseUrl = 'https://gardens-framing-pledge-horizon.trycloudflare.com';
+  static const String baseUrl = 'https://shoulder-asylum-anna-measure.trycloudflare.com';
   static const String apiUrl = '$baseUrl/api/v1';
 
   // ─── Endpoints ─────────────────────────────────────────────────────────────

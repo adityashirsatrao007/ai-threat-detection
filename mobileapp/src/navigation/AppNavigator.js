@@ -7,6 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 import LoginScreen from '../screens/LoginScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import HomeScreen from '../screens/HomeScreen';
+import AnalyzeScreen from '../screens/AnalyzeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function AppNavigator() {
           // Fully onboarded user
           <Stack.Screen name="Home" component={HomeScreen} />
         )}
+        <Stack.Screen name="Analyze" component={AnalyzeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

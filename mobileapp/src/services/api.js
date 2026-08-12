@@ -60,4 +60,25 @@ export const alertsAPI = {
     api.post('/alerts/acknowledge-all'),
 };
 
+// Real-time analyze endpoints (no mock — live backend threat scoring)
+export const analyzeAPI = {
+  sms: ({ sender, message, target_department, target_role }) =>
+    api.post('/analyze/sms', {
+      sender,
+      message,
+      target_department: target_department || null,
+      target_role: target_role || null,
+      async_processing: false,
+    }),
+  email: ({ sender, subject, body, target_department, target_role }) =>
+    api.post('/analyze/email', {
+      sender,
+      subject,
+      body,
+      target_department: target_department || null,
+      target_role: target_role || null,
+      async_processing: false,
+    }),
+};
+
 export default api;

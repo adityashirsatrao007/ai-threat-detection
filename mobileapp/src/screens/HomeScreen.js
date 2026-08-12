@@ -7,12 +7,14 @@ import { AuthContext } from '../context/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigation } from '@react-navigation/native';
 import { dashboardAPI, alertsAPI } from '../services/api';
 import { registerBackgroundTasks } from '../services/backgroundTasks';
 
 export default function HomeScreen() {
   const { logout, user } = useContext(AuthContext);
   const queryClient = useQueryClient();
+  const navigation = useNavigation();
 
   useEffect(() => {
     registerBackgroundTasks();
@@ -147,9 +149,15 @@ export default function HomeScreen() {
               <Text style={styles.statusText}>System Monitoring Active</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
-            <Ionicons name="log-out-outline" size={22} color="#64748b" />
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity style={styles.analyzeNavBtn} onPress={() => navigation.navigate('Analyze')}>
+              <Ionicons name="scan-outline" size={20} color="#3b82f6" />
+              <Text style={styles.analyzeNavText}>Analyze</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+              <Ionicons name="log-out-outline" size={22} color="#64748b" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Stats Row */}
@@ -229,6 +237,13 @@ const styles = StyleSheet.create({
   },
   statusText: { color: '#10b981', fontSize: 12, fontWeight: '700' },
   logoutBtn: { padding: 10, backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 50 },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  analyzeNavBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: 'rgba(59,130,246,0.12)', borderWidth: 1, borderColor: 'rgba(59,130,246,0.3)',
+    borderRadius: 50, paddingHorizontal: 14, paddingVertical: 10,
+  },
+  analyzeNavText: { color: '#3b82f6', fontSize: 13, fontWeight: '800' },
   sectionLabel: {
     fontSize: 11, fontWeight: '800', color: '#475569',
     letterSpacing: 1.5, marginBottom: 12, textTransform: 'uppercase',

@@ -11,6 +11,10 @@
 
 **Production-grade AI cybersecurity backend detecting phishing, scams, and social engineering in real-time.**
 
+> **⚡ Impact:** 🥇 **1st place — Hack from the Future 3.0 (600+ teams)** · real-time phishing / scam / social-engineering detection · NLP (DistilBERT) + behavioral rules + ML risk scoring
+>
+> 🖥️ **Live UI:** <https://frontend-fa9srqvov-adityas-projects-7c01ad4a.vercel.app>
+
 [API Docs](#api-documentation) • [Architecture](#architecture) • [Setup](#quick-start) • [Docker](#docker-deployment)
 
 </div>

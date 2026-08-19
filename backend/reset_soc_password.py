@@ -1,31 +1,41 @@
+import os
 import sys
 
-sys.path.insert(0, "/Users/surajbayas/Developer/SentinelX/backend")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app.database.models.models import User
 from app.database.session import SessionLocal
 
 
-def reset_password():
-    db = SessionLocal()
+def get_password_hash(password: str) -> str:
     try:
         from app.core.security import hash_password
-        pwd_hash = hash_password("Admin@2025")
+        return hash_password(password)
     except ImportError:
-        # Maybe it's get_password_hash
         from app.core.security import get_password_hash
-        pwd_hash = get_password_hash("Admin@2025")
-        
+        return get_password_hash(password)
+
+
+def reset_password():
+    password = os.environ.get("SENTINELX_BOOTSTRAP_PASSWORD")
+    if not password:
+        print("SENTINELX_BOOTSTRAP_PASSWORD env var not set; aborting")
+        sys.exit(1)
+    email = os.environ.get("SENTINELX_ADMIN_EMAIL", "soc@sentinelx.com")
+
+    db = SessionLocal()
     try:
-        user = db.query(User).filter(User.email == "soc@sentinelx.com").first()
+        pwd_hash = get_password_hash(password)
+        user = db.query(User).filter(User.email == email).first()
         if user:
             user.hashed_password = pwd_hash
             db.commit()
-            print("Password for soc@sentinelx.com has been reset to: Admin@2025")
+            print(f"Password for {email} has been reset.")
         else:
-            print("User soc@sentinelx.com not found!")
+            print(f"User {email} not found!")
     finally:
         db.close()
+
 
 if __name__ == "__main__":
     reset_password()

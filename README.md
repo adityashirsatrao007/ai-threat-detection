@@ -1,4 +1,5 @@
 # 🛡️ SentinelX — AI-Powered Real-Time Threat Detection Platform
+[![CI](https://github.com/adityashirsatrao007/ai-threat-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/adityashirsatrao007/ai-threat-detection/actions/workflows/ci.yml)
 
 <div align="center">
 
@@ -492,3 +493,14 @@ MIT License — See [LICENSE](LICENSE) for details.
 <div align="center">
   <strong>Built with ❤️ for cybersecurity operators worldwide.</strong>
 </div>
+
+## Contributing
+
+Contributions are welcome! For significant changes, please open an issue first to discuss the proposal.
+
+1. Fork the repository and create a feature branch.
+2. Make your changes (add tests where applicable).
+3. Ensure the CI workflow passes.
+4. Open a pull request with a clear description.
+
+This project is released under the MIT License — see [`LICENSE`](LICENSE).

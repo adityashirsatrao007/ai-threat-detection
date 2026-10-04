@@ -26,9 +26,9 @@
 
 SentinelX is a modular, AI-ready backend platform that continuously monitors communication streams — email, SMS, messaging, and phone calls — to detect malicious intent before credential theft or system compromise occurs.
 
-![Coiled network patch cables with RJ45 connectors on a white surface](figures/network-cables.jpg)
+![Risk scores for 448 emails: all 443 clean Enron messages sit in LOW between 1.0 and 1.4, all 5 injected phishing lures land in CRITICAL at 9.8, with no clean message flagged](figures/risk-separation.png)
 
-*Image: StockSnap.io, released under CC0.*
+From the committed sample `backend/enron_scored_sample.json`: 443 Enron messages plus 5 injected lures, scored by the risk engine. Score bands and the 8.6 CRITICAL floor come from `backend/app/ml/risk_engine.py`.
 
 ### Key Capabilities
 

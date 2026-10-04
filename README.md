@@ -26,6 +26,10 @@
 
 SentinelX is a modular, AI-ready backend platform that continuously monitors communication streams — email, SMS, messaging, and phone calls — to detect malicious intent before credential theft or system compromise occurs.
 
+![Coiled network patch cables with RJ45 connectors on a white surface](figures/network-cables.jpg)
+
+*Image: StockSnap.io, released under CC0.*
+
 ### Key Capabilities
 
 | Feature | Technology |

@@ -10,7 +10,7 @@
 ![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=for-the-badge&logo=redis)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker)
 
-**Production-grade AI cybersecurity backend detecting phishing, scams, and social engineering in real-time.**
+**AI cybersecurity backend detecting phishing, scams, and social engineering in real-time.**
 
 > **⚡ Impact:** 🥇 **1st place — Hack from the Future 3.0 (600+ teams)** · real-time phishing / scam / social-engineering detection · NLP (DistilBERT) + behavioral rules + ML risk scoring
 >
